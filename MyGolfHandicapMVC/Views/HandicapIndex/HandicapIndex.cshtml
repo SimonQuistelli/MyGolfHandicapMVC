@@ -1,0 +1,61 @@
+﻿@{
+    //ViewData["Title"] = "HandicapIndex";
+    //Layout = null;
+}
+<link rel="stylesheet" href="~/css/site.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script>
+    $(function () {
+        var handicapData = [];
+        var handicapDataSmall = [];
+        var scoreCardsCount = @Enumerable.Count(ViewBag.scoreCards);
+        var skip = scoreCardsCount - 6;
+
+        @if (Enumerable.Count(ViewBag.scoreCards) > 4) {
+            @foreach (var scoreCard in ViewBag.scoreCards) {
+                @:handicapData.push({ hc:@scoreCard.HandicapIndex.ToString("0.0"), date: '@scoreCard.Date.ToString("d'/'M'/'yy")' });
+            }
+        }
+
+        @if (Enumerable.Count(ViewBag.scoreCards) > 4) {
+            @foreach (var scoreCard in ViewBag.scoreCards) {
+                @:if (skip > 0) {
+                    @:skip--;
+                @:}
+                @:else {
+                    @:handicapDataSmall.push({ hc:@scoreCard.HandicapIndex.ToString("0.0"), date: '@scoreCard.Date.ToString("d'/'M'/'yy")' });
+                @:}
+            }
+        }
+
+        function drawGrapthReponsive(mql) {
+            if (mql.matches) {
+                drawHandicapGraph(handicapDataSmall, 300, 320);
+            }
+            else {
+                drawHandicapGraph(handicapData, 300, 600);
+            }
+        }
+
+        let mql = window.matchMedia("(max-width: 800px)");
+        drawGrapthReponsive(mql);
+        mql.addListener(drawGrapthReponsive);
+    });
+</script>
+@if (Enumerable.Count(ViewBag.scoreCards) < 3)
+{
+    var remainingCards = 3 - Enumerable.Count(ViewBag.scoreCards);
+    <h2>You need to submit @remainingCards more cards to get your handicap</h2>
+}
+else if (Enumerable.Count(ViewBag.scoreCards) == 4)
+{
+    <h2>Handicap Index @ViewBag.handicapIndex</h2>
+}
+else
+{
+    <h2 class="header_center">Handicap Index @ViewBag.handicapIndex</h2>
+    <canvas id="graph" width="680" height="300" class="mycanvas"></canvas>
+    <canvas id="toolTip" width="58" height="44" class="mycanvastip"></canvas>
+}
+

@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - My Golf Handicap</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</head>
+<body>
+    <div class="navbar">
+        <a href="javascript:void(0);" onclick="toggleMenu()" class="menu_icon"><i class="fa fa-bars"></i></a>
+        <span id="navbar_header" class="navbar_header">@ViewBag.menuHeader</span>
+    </div>
+
+    <div id="menu" class="menu">
+        <a id="menu1" class="@ViewBag.menu1Class" href="@Url.Action("handicapindex", "handicapindex")">Handicap Index</a>
+        <a id="menu2" class="@ViewBag.menu2Class" href="@Url.Action("scorecards", "scorecards")">View Scorecards</a>
+        <a id="menu3" class="@ViewBag.menu3Class" href="@Url.Action("addscorecard", "scorecards")">Submit Scorecard</a>
+        <a id="menu4" class="unselected" href="@Url.Action("logout", "home")">Logout</a>
+    </div>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

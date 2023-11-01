@@ -1,0 +1,127 @@
+﻿@{
+    ViewData["Title"] = "Add Score Card";
+}
+<link rel="stylesheet" href="~/css/site.css" />
+<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(function () {
+        var dtToday = new Date();
+
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+
+        var maxDate = year + '-' + month + '-' + day;
+        $("#date").attr("max", maxDate);
+        $("#date").attr("value", maxDate);
+    });
+    function onGolfCourseSelect() {
+        var courseid = document.getElementById('course_select').value;
+        //var url = "https://localhost:44393/ScoreCards/AddScoreCard/" + courseid;
+        var url = '@Url.Action("AddScoreCard","ScoreCards", new { id = "js-id"})'.replace("js-id", encodeURIComponent(courseid));
+
+        //var url = "https://mygolfhandicapapp.azurewebsites.net/ScoreCards/AddScoreCard/" + courseid;
+        console.log(url);
+            location.href = url;
+        }
+        function onTeeSelect() {
+            var courseid = document.getElementById('course_select').value;
+            var teeid = document.getElementById('tee_select').value;
+            //var url = "https://localhost:44393/ScoreCards/AddScoreCard/" + courseid + "/" + teeid;
+            //var url = "https://mygolfhandicapapp.azurewebsites.net/ScoreCards/AddScoreCard/" + courseid + "/" + teeid;
+            var url = '@Url.Action("AddScoreCard","ScoreCards", new { id = "js-id", id2 = "js-id2"})'.replace("js-id", encodeURIComponent(courseid)).replace("js-id2", encodeURIComponent(teeid));
+            console.log(url);
+            location.href = url;
+        }
+        function onHoleSelect(roundType) {
+            var courseid = document.getElementById('course_select').value;
+            var teeid = document.getElementById('tee_select').value;
+            //var url = "https://localhost:44393/ScoreCards/AddScoreCard/" + courseid + "/" + teeid + "/" + roundType;
+            //var url = "https://mygolfhandicapapp.azurewebsites.net/ScoreCards/AddScoreCard/" + courseid + "/" + teeid + "/" + roundType;
+            var url = '@Url.Action("AddScoreCard","ScoreCards", new { id = "js-id", id2 = "js-id2", id3 = "js-id3"})'.replace("js-id", encodeURIComponent(courseid)).replace("js-id2", encodeURIComponent(teeid)).replace("js-id3", encodeURIComponent(roundType));
+            console.log(url);
+            location.href = url;
+        }
+        function down(id) {
+            var holeid = "hole" + id;
+            var hidden_score = "hole_score_" + id;
+            var score = document.getElementById(hidden_score).value;
+
+            if (score > 1) {
+                document.getElementById(holeid).innerHTML--;
+                document.getElementById(hidden_score).value--;
+                document.getElementById('score').innerHTML--;
+            }
+        }
+        function up(id) {
+            var holeid = "hole" + id;
+            var hidden_score = "hole_score_" + id;
+            document.getElementById(holeid).innerHTML++;
+            document.getElementById(hidden_score).value++;
+            document.getElementById('score').innerHTML++;
+        }
+</script>
+<form asp-controller="ScoreCards" asp-action="AddScoreCardSubmit" method="post">
+    <input type="hidden" id="scorecard_id" name="scorecard_id" value="@ViewBag.scorecard_id" />
+    <div class="div_course_addscorecard">
+        <span class="span_addscorecard">Course</span><select id="course_select" asp-items="@ViewBag.courseSelectList" onchange="onGolfCourseSelect()" name="golf_course_id" style="font-size:16px"></select>
+        <span class="span_addscorecard">Tee</span><select id="tee_select" asp-items="@ViewBag.teeSelectList" onchange="onTeeSelect()" name="tee_id" style="font-size:16px"></select>
+    </div>
+    <div class="div_roundtype_addscorecard">
+        <input type="radio" id="radio_18" value="1" name="round_type" onclick="onHoleSelect(1)" @(ViewBag.roundType == 1 ? "checked" : "")><label for="radio_18">18 Holes</label>
+        <input type="radio" id="radio_front_9" value="2" name="round_type" onclick="onHoleSelect(2)" @(ViewBag.roundType == 2 ? "checked" : "")><label for="radio_9">Front 9</label>
+        <input type="radio" id="radio_back_9" value="3" name="round_type" onclick="onHoleSelect(3)" @(ViewBag.roundType == 3 ? "checked" : "")><label for="radio_9">Back 9</label><br />
+    </div>
+    <div class="div_date_addscorecard">
+        <span class="span_addscorecard">Date</span><input type="date" id="date" name="date" />
+    </div>
+    <div class="table_addscorecard">
+        <table id="score_card">
+            <tr>
+                <th class="border">Hole</th>
+                <th class="border">Yards</th>
+                <th class="border">Par</th>
+                <th class="border">SI</th>
+                <th class="border">Score</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            @foreach (var hole in ViewBag.HoleInfos)
+            {
+                var holeid = "hole" + hole.HoleNumber;
+                var hidden_score_name = "hole_score_" + hole.HoleNumber;
+                <tr>
+                    <td class="border">@hole.HoleNumber</td>
+                    <td class="border">@hole.Yards</td>
+                    <td class="border">@hole.Par</td>
+                    <td class="border">@hole.StrokeIndex</td>
+                    <td class="border score" id="@holeid">@hole.Par</td>
+                    <td><input type="hidden" id="@hidden_score_name" name="@hidden_score_name" value="@hole.Par" /></td>
+                    <td class="border"><i class="fa-solid fa-square-minus" style="font-size: 24px; color: #04bb66;" onclick="down(@hole.HoleNumber)"></i></td>
+                    <td class="border"><i class="fa-solid fa-square-plus" style="font-size: 24px; color: #04bb66;" onclick="up(@hole.HoleNumber)"></i></td>
+                </tr>
+            }
+            <tr>
+                <td></td>
+                <td>@ViewBag.yards</td>
+                <td></td>
+                <td></td>
+                <td id="score">@ViewBag.score</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+    <div class="div_submit_addscorecard">
+        <button type="submit" class="button_submit">Submit Scorecard</button>
+    </div>
+</form>
+

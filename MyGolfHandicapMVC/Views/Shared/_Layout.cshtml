@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - My Golf Handicap</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <button type="button" class="btn btn-info p-1" onclick="location.href='@Url.Action("index", "handicapindex")'">Handicap Index</button>
+                <button type="button" class="btn btn-info p-1" onclick="location.href='@Url.Action("index", "scorecards")'">Scorecards</button>
+                <form method="get" asp-controller="ScoreCards" asp-action="AddScoreCard">
+                    <button type="submit" class="btn btn-info p-1">Add Score Card</button>
+                </form>
+                <form method="post" asp-controller="Home" asp-action="Logout">
+                    <button type="submit" class="btn btn-info p-1">Logout</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+    <div class="topnav">
+        <a id="nav_handicap" href="@Url.Action("index", "handicapindex")" onclick="SelectedNavItem('nav_handicap')">Handicap Index</a>
+        <a id="nav_scorecards" href="@Url.Action("index", "scorecards")" onclick="SelectedNavItem('nav_scorecards')">Scorecards</a>
+        <a id="nav_add_scorecard" href="@Url.Action("addscorecard", "scorecards")" onclick="SelectedNavItem('nav_add_scorecard')">Add Scorecard</a>
+        <form method="post" asp-controller="Home" asp-action="Logout">
+            <a id="nav_logout" href="#about" onclick="SelectedNavItem('nav_logout')">Logout</a>
+        </form>
+    </div>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,10 @@
+﻿@{
+    //Layout = null;
+}
+<h2 class="header_center">Success</h2>
+<h2 class="header_center">Your updated handicap index is @ViewBag.handicapIndex</h2>
+<div class="div_submit_addscorecard">
+    <form asp-controller="scorecards" asp-action="addscorecard" method="get">
+        <button type="submit" class="button_submit_another">Submit Another Scorecard</button>
+    </form>
+</div>

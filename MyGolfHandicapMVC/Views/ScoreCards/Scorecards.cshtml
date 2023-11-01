@@ -1,0 +1,42 @@
+﻿@{
+    //Layout = null;
+}
+<link rel="stylesheet" href="~/css/site.css" />
+<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+<script src="~/js/site.js" asp-append-version="true"></script>
+<div class="table_scorecards">
+    <table>
+        <tr>
+            <th>Golf Course</th>
+            <th>Date</th>
+            <th>Tee</th>
+            <th>Holes Played</th>
+            <th>Total</th>
+            <th>Score</th>
+            <th></th>
+        </tr>
+        @foreach (var scorecard in ViewBag.ScoreCards)
+        {
+    <tr>
+        <td>@scorecard.CourseName</td>
+        <td>@scorecard.Date.ToString("dd'/'MM'/'yy")</td>
+        <td>@scorecard.TeeColour</td>
+        <td>@scorecard.HolesPlayed</td>
+        <td>@scorecard.GrossScore</td>
+        <td>@scorecard.Score</td>
+        <td>
+            <form method="post" asp-controller="ScoreCards" asp-action="UpdateScoreCard" class="form_delete">
+                <input type="hidden" name="scorecardid" value="@scorecard.ScoreCardId" />
+                <button type="submit" class="button_delete"><span class="icon_delete"><i class="fa fa-pen fa-soild"></i></span></button>
+            </form>
+        </td>
+        <td>
+            <form method="post" asp-controller="ScoreCards" asp-action="DeleteScoreCard" class="form_delete">
+                <input type="hidden" name="scorecardid" value="@scorecard.ScoreCardId" />
+                <button type="submit" class="button_delete"><span class="icon_delete"><i class="fa fa-trash"></i></span></button>
+            </form>
+        </td>
+    </tr>
+        }
+    </table>
+</div>

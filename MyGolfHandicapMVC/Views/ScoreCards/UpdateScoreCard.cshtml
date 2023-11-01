@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "Add Score Card";
+}
+<link rel="stylesheet" href="~/css/site.css" />
+<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+<script>
+    function down(id) {
+        var holeid = "hole" + id;
+        var hidden_score = "hole_score_" + id;
+        var score = document.getElementById(hidden_score).value;
+
+        if (score > 1) {
+            document.getElementById(holeid).innerHTML--;
+            document.getElementById(hidden_score).value--;
+            document.getElementById('score').innerHTML--;
+        }
+    }
+    function up(id) {
+        var holeid = "hole" + id;
+        var hidden_score = "hole_score_" + id;
+        document.getElementById(holeid).innerHTML++;
+        document.getElementById(hidden_score).value++;
+        document.getElementById('score').innerHTML++;
+    }
+</script>
+<div class="div_scorecard_details">
+    <table class="table_scorecard_details">
+        <tr>
+            <td style="font-weight:bold">Golf Course</td>
+            <td>@ViewBag.course.Name</td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold">Tee</td>
+            <td>@ViewBag.scoreCard.TeeColour</td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold">Date</td>
+            <td>@ViewBag.date</td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold">Holes Played</td>
+            <td>@ViewBag.scoreCard.GetHolesPlayed()</td>
+        </tr>
+    </table>
+</div>
+<form asp-controller="ScoreCards" asp-action="UpdateScoreCardSubmit" method="post">
+    <input type="hidden" id="scorecard_id" name="scorecard_id" value="@ViewBag.scoreCard.ScoreCardId" />
+    <div class="table_addscorecard">
+        <table id="score_card" style="margin-top:30px">
+            <tr>
+                <th class="border">Hole</th>
+                <th class="border">Yards</th>
+                <th class="border">Par</th>
+                <th class="border">SI</th>
+                <th class="border">Score</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            @foreach (var hole in ViewBag.scorecard.HoleScores)
+            {
+                var holeid = "hole" + hole.HoleNumber;
+                var hidden_score_name = "hole_score_" + hole.HoleNumber;
+                <tr>
+                    <td class="border">@hole.HoleNumber</td>
+                    <td class="border">@hole.Yards</td>
+                    <td class="border">@hole.HolePar</td>
+                    <td class="border">@hole.StrokeIndex</td>
+                    <td class="border score" id="@holeid">@hole.Score</td>
+                    <td><input type="hidden" id="@hidden_score_name" name="@hidden_score_name" value="@hole.Score" /></td>
+                    <td class="border"><i class="fa-solid fa-square-minus" style="font-size: 24px; color: #04bb66;" onclick="down(@hole.HoleNumber)"></i></td>
+                    <td class="border"><i class="fa-solid fa-square-plus" style="font-size: 24px; color: #04bb66;" onclick="up(@hole.HoleNumber)"></i></td>
+                </tr>
+            }
+            <tr>
+                <td></td>
+                <td>@ViewBag.yards</td>
+                <td></td>
+                <td></td>
+                <td id="score">@ViewBag.score</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+    <div class="div_submit_addscorecard">
+        <button type="submit" class="button_submit">Update Scorecard</button>
+    </div>
+</form>

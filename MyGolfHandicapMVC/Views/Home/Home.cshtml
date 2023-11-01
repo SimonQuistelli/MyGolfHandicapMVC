@@ -1,0 +1,22 @@
+﻿@{
+    Layout = null;
+}
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<body>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <div class="navbar">
+        <a href="javascript:void(0);" onclick="toggleMenu()" class="menu_icon"><i class="fa fa-bars"></i></a><span id="navbar_header" class="navbar_header">Handicap Index</span>
+    </div>
+
+    <div id="menu_sidepanel" class="sidepanel">
+        <a id="test1" href="@Url.Action("handicapindex", "handicapindex")" target="main_content" onclick="selectPage('Handicap Index')">Haindicap Index</a>
+        <a id="test2" href="@Url.Action("scorecards", "scorecards")" target="main_content" onclick="selectPage('View Scorecards')">View Scorecards</a>
+        <a id="test3" href="@Url.Action("addscorecard", "scorecards")" target="main_content" onclick="selectPage('Submit Scorecard')">Submit Scorecard</a>
+        <a id="test4" class="test" href="@Url.Action("logout", "home")">Logout</a>
+    </div>
+    <div class="content">
+        <iframe src="@Url.Action("handicapindex", "handicapindex")" name="main_content" style="border:none" height="1500px" width="100%" scrolling="no" frameborder="0"></iframe>
+    </div>
+</body>
